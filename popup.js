@@ -37,6 +37,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const autoSaveCheckbox = document.getElementById('autoSave');
   const fileFormatSelect = document.getElementById('fileFormat');
   const languageSelect = document.getElementById('language');
+  const scanBtn = document.getElementById('scanBtn');
 
   // Load detected M3U8 URLs
   loadDetectedUrls();
@@ -83,6 +84,24 @@ document.addEventListener('DOMContentLoaded', function() {
     chrome.runtime.sendMessage({ action: 'clearDetected' }, function(response) {
       if (response.success) {
         loadDetectedUrls();
+      }
+    });
+  });
+
+  // Scan page for videos
+  scanBtn.addEventListener('click', function() {
+    scanBtn.disabled = true;
+    scanBtn.textContent = '⏳ Scanning...';
+
+    chrome.runtime.sendMessage({ action: 'scanPageNow' }, function(response) {
+      scanBtn.disabled = false;
+      scanBtn.textContent = '🔍 Scan';
+
+      if (response && response.success) {
+        showStatus(`Found ${response.count} video(s) on page!`, 'success');
+        loadDetectedUrls();
+      } else {
+        showStatus('No videos found on page', 'info');
       }
     });
   });

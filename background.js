@@ -141,6 +141,89 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       }
     });
     return true;
+  } else if (request.action === 'videosFound') {
+    // Handle videos found by content script
+    if (request.videos && request.videos.length > 0) {
+      chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+        if (tabs[0]) {
+          const tabId = tabs[0].id;
+
+          // Get existing URLs for this tab or create new array
+          if (!detectedM3U8s.has(tabId)) {
+            detectedM3U8s.set(tabId, []);
+          }
+
+          const tabUrls = detectedM3U8s.get(tabId);
+
+          // Add new videos (avoid duplicates)
+          request.videos.forEach(video => {
+            if (!tabUrls.some(item => item.url === video.url)) {
+              tabUrls.push(video);
+            }
+          });
+
+          // Keep only last 10 URLs per tab
+          while (tabUrls.length > 10) {
+            tabUrls.shift();
+          }
+
+          // Update badge
+          chrome.action.setBadgeText({
+            text: tabUrls.length.toString(),
+            tabId: tabId
+          });
+          chrome.action.setBadgeBackgroundColor({
+            color: '#4CAF50',
+            tabId: tabId
+          });
+
+          console.log(`Content script found ${request.videos.length} videos on tab ${tabId}`);
+        }
+      });
+    }
+    return true;
+  } else if (request.action === 'scanPageNow') {
+    // Request to scan current page manually
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      if (tabs[0]) {
+        chrome.tabs.sendMessage(tabs[0].id, { action: 'scanPage' }, (response) => {
+          if (response && response.videos) {
+            // Process found videos
+            const tabId = tabs[0].id;
+
+            if (!detectedM3U8s.has(tabId)) {
+              detectedM3U8s.set(tabId, []);
+            }
+
+            const tabUrls = detectedM3U8s.get(tabId);
+
+            response.videos.forEach(video => {
+              if (!tabUrls.some(item => item.url === video.url)) {
+                tabUrls.push(video);
+              }
+            });
+
+            while (tabUrls.length > 10) {
+              tabUrls.shift();
+            }
+
+            chrome.action.setBadgeText({
+              text: tabUrls.length.toString(),
+              tabId: tabId
+            });
+            chrome.action.setBadgeBackgroundColor({
+              color: '#4CAF50',
+              tabId: tabId
+            });
+
+            sendResponse({ success: true, count: response.videos.length });
+          } else {
+            sendResponse({ success: false, count: 0 });
+          }
+        });
+      }
+    });
+    return true;
   }
 });
 

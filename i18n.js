@@ -7,9 +7,10 @@ const translations = {
 
     // Main UI
     title: 'M3U8 Video Downloader',
-    detectedSection: 'Detected M3U8 on page',
+    detectedSection: 'Detected Videos on page',
+    scanBtn: '🔍 Scan',
     clearBtn: 'Clear',
-    noDetected: 'No m3u8 detected on this page.<br>Play a video to detect automatically.',
+    noDetected: 'No videos detected on this page.<br>Click Scan or play a video to detect automatically.',
 
     // Input fields
     urlLabel: 'M3U8 URL (Manual Input):',
@@ -62,9 +63,10 @@ const translations = {
     extensionDesc: 'M3U8 스트리밍 비디오를 쉽게 다운로드',
 
     title: 'M3U8 비디오 다운로더',
-    detectedSection: '페이지에서 감지된 M3U8',
+    detectedSection: '페이지에서 감지된 비디오',
+    scanBtn: '🔍 스캔',
     clearBtn: '지우기',
-    noDetected: '이 페이지에서 m3u8를 감지하지 못했습니다.<br>비디오를 재생하면 자동으로 감지됩니다.',
+    noDetected: '이 페이지에서 비디오를 감지하지 못했습니다.<br>스캔 버튼을 클릭하거나 비디오를 재생하면 자동으로 감지됩니다.',
 
     urlLabel: 'M3U8 URL (수동 입력):',
     urlPlaceholder: 'https://example.com/video.m3u8',
@@ -110,9 +112,10 @@ const translations = {
     extensionDesc: 'M3U8ストリーミングビデオを簡単にダウンロード',
 
     title: 'M3U8 ビデオダウンローダー',
-    detectedSection: 'ページで検出されたM3U8',
+    detectedSection: 'ページで検出されたビデオ',
+    scanBtn: '🔍 スキャン',
     clearBtn: 'クリア',
-    noDetected: 'このページでm3u8が検出されませんでした。<br>ビデオを再生すると自動的に検出されます。',
+    noDetected: 'このページでビデオが検出されませんでした。<br>スキャンボタンをクリックするか、ビデオを再生すると自動的に検出されます。',
 
     urlLabel: 'M3U8 URL（手動入力）:',
     urlPlaceholder: 'https://example.com/video.m3u8',
@@ -158,9 +161,10 @@ const translations = {
     extensionDesc: '轻松下载M3U8流媒体视频',
 
     title: 'M3U8 视频下载器',
-    detectedSection: '页面上检测到的M3U8',
+    detectedSection: '页面上检测到的视频',
+    scanBtn: '🔍 扫描',
     clearBtn: '清除',
-    noDetected: '此页面未检测到m3u8。<br>播放视频后将自动检测。',
+    noDetected: '此页面未检测到视频。<br>点击扫描按钮或播放视频后将自动检测。',
 
     urlLabel: 'M3U8 URL（手动输入）:',
     urlPlaceholder: 'https://example.com/video.m3u8',
@@ -206,9 +210,10 @@ const translations = {
     extensionDesc: 'Descarga videos streaming M3U8 fácilmente',
 
     title: 'Descargador de Video M3U8',
-    detectedSection: 'M3U8 detectado en la página',
+    detectedSection: 'Videos detectados en la página',
+    scanBtn: '🔍 Escanear',
     clearBtn: 'Limpiar',
-    noDetected: 'No se detectó m3u8 en esta página.<br>Reproduce un video para detectarlo automáticamente.',
+    noDetected: 'No se detectaron videos en esta página.<br>Haz clic en Escanear o reproduce un video para detectarlo automáticamente.',
 
     urlLabel: 'URL M3U8 (Entrada manual):',
     urlPlaceholder: 'https://example.com/video.m3u8',
@@ -254,9 +259,10 @@ const translations = {
     extensionDesc: 'Téléchargez facilement des vidéos en streaming M3U8',
 
     title: 'Téléchargeur de Vidéo M3U8',
-    detectedSection: 'M3U8 détecté sur la page',
+    detectedSection: 'Vidéos détectées sur la page',
+    scanBtn: '🔍 Scanner',
     clearBtn: 'Effacer',
-    noDetected: 'Aucun m3u8 détecté sur cette page.<br>Lisez une vidéo pour la détecter automatiquement.',
+    noDetected: 'Aucune vidéo détectée sur cette page.<br>Cliquez sur Scanner ou lisez une vidéo pour la détecter automatiquement.',
 
     urlLabel: 'URL M3U8 (Saisie manuelle):',
     urlPlaceholder: 'https://example.com/video.m3u8',
@@ -302,9 +308,10 @@ const translations = {
     extensionDesc: 'M3U8 Streaming-Videos einfach herunterladen',
 
     title: 'M3U8 Video Downloader',
-    detectedSection: 'M3U8 auf der Seite erkannt',
+    detectedSection: 'Videos auf der Seite erkannt',
+    scanBtn: '🔍 Scannen',
     clearBtn: 'Löschen',
-    noDetected: 'Kein m3u8 auf dieser Seite erkannt.<br>Spielen Sie ein Video ab, um es automatisch zu erkennen.',
+    noDetected: 'Keine Videos auf dieser Seite erkannt.<br>Klicken Sie auf Scannen oder spielen Sie ein Video ab, um es automatisch zu erkennen.',
 
     urlLabel: 'M3U8 URL (Manuelle Eingabe):',
     urlPlaceholder: 'https://example.com/video.m3u8',
