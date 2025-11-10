@@ -20,12 +20,12 @@ A powerful Chrome extension to easily download M3U8 streaming videos with multi-
 - **Manual Input**: Option to enter URLs directly
 - **Auto-Parsing**: Automatically parses video segments from M3U8 URLs
 - **Master Playlist Support**: Automatically handles master playlists
-- **Merged Downloads**: Downloads and merges all M3U8 segments into a single file
+- **Merged Downloads**: Downloads and merges all M3U8 segments into a single TS file
 - **Direct Downloads**: Direct download for MP4 and other video formats
 - **Progress Display**: Real-time download progress and status updates
 - **Auto-Filename**: Generates timestamp-based filenames when left empty
 - **Auto-Save**: Option to download without prompting for location
-- **Format Selection**: Choose between TS or MP4 format (for M3U8)
+- **TS Format**: M3U8 videos saved as TS format (high compatibility with VLC, etc.)
 - **Multi-Language**: Supports 7 languages (EN, KO, JA, ZH-CN, ES, FR, DE)
 
 ### Installation
@@ -58,12 +58,12 @@ A powerful Chrome extension to easily download M3U8 streaming videos with multi-
 - **수동 입력**: URL을 직접 입력할 수도 있음
 - **자동 파싱**: M3U8 URL에서 비디오 세그먼트 자동 파싱
 - **Master Playlist 지원**: Master playlist 자동 처리
-- **병합 다운로드**: M3U8 세그먼트를 다운로드하여 하나의 파일로 병합
+- **병합 다운로드**: M3U8 세그먼트를 다운로드하여 하나의 TS 파일로 병합
 - **직접 다운로드**: MP4 및 기타 비디오 형식의 직접 다운로드
 - **진행률 표시**: 실시간 다운로드 진행률 및 상태 표시
 - **자동 파일명**: 파일명을 비우면 타임스탬프로 자동 생성
 - **자동 저장**: 저장 위치를 묻지 않고 자동으로 다운로드 (옵션)
-- **형식 선택**: TS 또는 MP4 형식으로 저장 가능 (M3U8용)
+- **TS 형식**: M3U8 비디오는 TS 형식으로 저장 (VLC 등에서 높은 호환성)
 - **다국어 지원**: 7개 언어 지원 (영어, 한국어, 일본어, 중국어, 스페인어, 프랑스어, 독일어)
 
 ## 설치 방법

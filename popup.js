@@ -35,7 +35,6 @@ document.addEventListener('DOMContentLoaded', function() {
   const detectedCount = document.getElementById('detectedCount');
   const clearBtn = document.getElementById('clearBtn');
   const autoSaveCheckbox = document.getElementById('autoSave');
-  const fileFormatSelect = document.getElementById('fileFormat');
   const languageSelect = document.getElementById('language');
   const scanBtn = document.getElementById('scanBtn');
 
@@ -43,15 +42,12 @@ document.addEventListener('DOMContentLoaded', function() {
   loadDetectedUrls();
 
   // Load saved settings from storage
-  chrome.storage.local.get(['lastUrl', 'autoSave', 'fileFormat', 'language'], function(result) {
+  chrome.storage.local.get(['lastUrl', 'autoSave', 'language'], function(result) {
     if (result.lastUrl) {
       m3u8UrlInput.value = result.lastUrl;
     }
     if (result.autoSave !== undefined) {
       autoSaveCheckbox.checked = result.autoSave;
-    }
-    if (result.fileFormat) {
-      fileFormatSelect.value = result.fileFormat;
     }
 
     // Load language or detect browser language
@@ -63,10 +59,6 @@ document.addEventListener('DOMContentLoaded', function() {
   // Save settings when changed
   autoSaveCheckbox.addEventListener('change', function() {
     chrome.storage.local.set({ autoSave: autoSaveCheckbox.checked });
-  });
-
-  fileFormatSelect.addEventListener('change', function() {
-    chrome.storage.local.set({ fileFormat: fileFormatSelect.value });
   });
 
   // Language selection
@@ -110,7 +102,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const m3u8Url = m3u8UrlInput.value.trim();
     let fileName = fileNameInput.value.trim();
     const autoSave = autoSaveCheckbox.checked;
-    const fileFormat = fileFormatSelect.value;
 
     if (!m3u8Url) {
       showStatus(t('errorNoUrl', currentLang), 'error');
@@ -149,7 +140,7 @@ document.addEventListener('DOMContentLoaded', function() {
         url: m3u8Url,
         fileName: fileName,
         autoSave: autoSave,
-        fileFormat: fileFormat
+        fileFormat: 'ts'  // Always use TS format for M3U8
       }, function(response) {
         if (response.success) {
           showStatus(t('statusSuccess', currentLang), 'success');

@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "M3U8 Video Downloader",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "description": "Download M3U8 and direct video files with page scanning and multi-language support",
   "permissions": [
     "activeTab",
