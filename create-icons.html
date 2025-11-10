@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create Extension Icons</title>
+</head>
+<body>
+    <h1>Generating Icons...</h1>
+    <canvas id="canvas16" width="16" height="16" style="display:none;"></canvas>
+    <canvas id="canvas48" width="48" height="48" style="display:none;"></canvas>
+    <canvas id="canvas128" width="128" height="128" style="display:none;"></canvas>
+
+    <script>
+        function createIcon(size) {
+            const canvas = document.getElementById('canvas' + size);
+            const ctx = canvas.getContext('2d');
+
+            // Background
+            ctx.fillStyle = '#4CAF50';
+            ctx.fillRect(0, 0, size, size);
+
+            // Play icon (triangle)
+            ctx.fillStyle = 'white';
+            ctx.beginPath();
+            const centerX = size / 2;
+            const centerY = size / 2;
+            const triangleSize = size * 0.4;
+            ctx.moveTo(centerX - triangleSize/2, centerY - triangleSize/2);
+            ctx.lineTo(centerX - triangleSize/2, centerY + triangleSize/2);
+            ctx.lineTo(centerX + triangleSize/2, centerY);
+            ctx.closePath();
+            ctx.fill();
+
+            // Download arrow
+            const arrowSize = size * 0.15;
+            ctx.fillRect(centerX + triangleSize/4, centerY - arrowSize, arrowSize/2, arrowSize * 1.5);
+            ctx.beginPath();
+            ctx.moveTo(centerX + triangleSize/4 - arrowSize/2, centerY + arrowSize/2);
+            ctx.lineTo(centerX + triangleSize/4 + arrowSize, centerY + arrowSize/2);
+            ctx.lineTo(centerX + triangleSize/4 + arrowSize/4, centerY + arrowSize);
+            ctx.closePath();
+            ctx.fill();
+
+            // Download to file
+            canvas.toBlob(function(blob) {
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'icon' + size + '.png';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            });
+        }
+
+        // Create all three icon sizes
+        createIcon(16);
+        setTimeout(() => createIcon(48), 100);
+        setTimeout(() => createIcon(128), 200);
+
+        setTimeout(() => {
+            document.body.innerHTML = '<h1>Icons created! Check your downloads.</h1><p>Move the icon files to the extension folder.</p>';
+        }, 500);
+    </script>
+</body>
+</html>
