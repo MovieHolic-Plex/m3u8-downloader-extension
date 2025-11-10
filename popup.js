@@ -98,7 +98,11 @@ document.addEventListener('DOMContentLoaded', function() {
       return;
     }
 
-    if (!m3u8Url.includes('.m3u8')) {
+    // Check if URL is valid video URL
+    const videoExtensions = ['.m3u8', '.mp4', '.webm', '.avi', '.mov', '.mkv', '.flv', '.wmv', '.m4v', '.mpg', '.mpeg', '.3gp'];
+    const isValidVideo = videoExtensions.some(ext => m3u8Url.toLowerCase().includes(ext));
+
+    if (!isValidVideo) {
       showStatus(t('errorInvalidUrl', currentLang), 'error');
       return;
     }

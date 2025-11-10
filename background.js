@@ -1,13 +1,32 @@
 // Store detected m3u8 URLs by tab
 const detectedM3U8s = new Map();
 
-// Listen for web requests to detect m3u8 files
+// Supported video formats
+const VIDEO_EXTENSIONS = ['.m3u8', '.mp4', '.webm', '.avi', '.mov', '.mkv', '.flv', '.wmv', '.m4v', '.mpg', '.mpeg', '.3gp'];
+
+// Check if URL is a video file
+function isVideoUrl(url) {
+  // Remove query parameters for extension check
+  const urlWithoutParams = url.split('?')[0];
+  return VIDEO_EXTENSIONS.some(ext => urlWithoutParams.toLowerCase().includes(ext));
+}
+
+// Get video type from URL
+function getVideoType(url) {
+  const urlLower = url.toLowerCase();
+  if (urlLower.includes('.m3u8')) return 'm3u8';
+  if (urlLower.includes('.mp4')) return 'mp4';
+  if (urlLower.includes('.webm')) return 'webm';
+  return 'video';
+}
+
+// Listen for web requests to detect video files
 chrome.webRequest.onBeforeRequest.addListener(
   (details) => {
     const url = details.url;
 
-    // Check if URL contains .m3u8
-    if (url.includes('.m3u8')) {
+    // Check if URL is a video file
+    if (isVideoUrl(url)) {
       const tabId = details.tabId;
 
       // Don't track requests from the extension itself
@@ -22,10 +41,12 @@ chrome.webRequest.onBeforeRequest.addListener(
 
       // Add URL if not already present
       if (!tabUrls.some(item => item.url === url)) {
+        const videoType = getVideoType(url);
         tabUrls.push({
           url: url,
           timestamp: Date.now(),
-          tabUrl: details.initiator || 'unknown'
+          tabUrl: details.initiator || 'unknown',
+          type: videoType
         });
 
         // Keep only last 10 URLs per tab
@@ -33,7 +54,7 @@ chrome.webRequest.onBeforeRequest.addListener(
           tabUrls.shift();
         }
 
-        console.log('Detected M3U8:', url);
+        console.log(`Detected ${videoType.toUpperCase()}:`, url);
 
         // Update badge to show count
         chrome.action.setBadgeText({
@@ -66,18 +87,37 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
 // Listen for messages from popup
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.action === 'downloadM3U8') {
-    handleM3U8Download(
-      request.url,
-      request.fileName,
-      request.autoSave || false,
-      request.fileFormat || 'ts'
-    )
-      .then(() => {
-        sendResponse({ success: true });
-      })
-      .catch((error) => {
-        sendResponse({ success: false, error: error.message });
-      });
+    const url = request.url;
+
+    // Determine if this is M3U8 or direct video
+    if (url.toLowerCase().includes('.m3u8')) {
+      // Handle M3U8 download
+      handleM3U8Download(
+        url,
+        request.fileName,
+        request.autoSave || false,
+        request.fileFormat || 'ts'
+      )
+        .then(() => {
+          sendResponse({ success: true });
+        })
+        .catch((error) => {
+          sendResponse({ success: false, error: error.message });
+        });
+    } else {
+      // Handle direct video download
+      handleDirectVideoDownload(
+        url,
+        request.fileName,
+        request.autoSave || false
+      )
+        .then(() => {
+          sendResponse({ success: true });
+        })
+        .catch((error) => {
+          sendResponse({ success: false, error: error.message });
+        });
+    }
     return true; // Keep the message channel open for async response
   } else if (request.action === 'getDetectedM3U8s') {
     // Get detected URLs for current tab
@@ -103,6 +143,48 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     return true;
   }
 });
+
+// Handle direct video file downloads (MP4, WebM, etc.)
+async function handleDirectVideoDownload(videoUrl, fileName, autoSave) {
+  try {
+    sendProgressUpdate(5, 'Starting video download...');
+
+    // Determine file extension from URL
+    let extension = 'mp4'; // default
+    const urlLower = videoUrl.toLowerCase();
+    if (urlLower.includes('.webm')) extension = 'webm';
+    else if (urlLower.includes('.avi')) extension = 'avi';
+    else if (urlLower.includes('.mov')) extension = 'mov';
+    else if (urlLower.includes('.mkv')) extension = 'mkv';
+    else if (urlLower.includes('.flv')) extension = 'flv';
+    else if (urlLower.includes('.wmv')) extension = 'wmv';
+
+    sendProgressUpdate(50, 'Downloading video...');
+
+    // Use Chrome's download API directly
+    const downloadId = await chrome.downloads.download({
+      url: videoUrl,
+      filename: `${fileName}.${extension}`,
+      saveAs: !autoSave
+    });
+
+    sendProgressUpdate(100, 'Download complete!');
+
+    // Send completion message
+    chrome.runtime.sendMessage({
+      action: 'downloadComplete',
+      message: 'Successfully downloaded video!'
+    }).catch(() => {});
+
+  } catch (error) {
+    console.error('Direct video download error:', error);
+    chrome.runtime.sendMessage({
+      action: 'downloadError',
+      error: error.message
+    }).catch(() => {});
+    throw error;
+  }
+}
 
 async function handleM3U8Download(m3u8Url, fileName, autoSave, fileFormat) {
   try {
